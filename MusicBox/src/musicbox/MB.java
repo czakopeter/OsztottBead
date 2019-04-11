@@ -7,6 +7,8 @@ import java.util.List;
 public class MB {
   HashMap<String, ArrayList<AtomicMusic> > musicList;
   HashMap<Integer, PlayedMusic> playedMusic;
+  
+  static HashMap<String,Integer> voiceToCode;
 
   public MB() {
     musicList = new HashMap<>();
