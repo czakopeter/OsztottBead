@@ -8,10 +8,10 @@ import java.util.List;
 import java.util.Scanner;
 
 public class MB {
-  HashMap<String, ArrayList<AtomicMusic> > musicList;
-  HashMap<Integer, PlayedMusic> playedMusic;
+  private final HashMap<String, ArrayList<AtomicMusic> > musicList;
+  private final HashMap<Integer, PlayedMusic> playedMusic;
   
-  static HashMap<String,Integer> voiceToCode = new HashMap<>();;
+  private final static HashMap<String,Integer> voiceToCode = new HashMap<>();;
 
   public MB() {
     musicList = new HashMap<>();
@@ -19,7 +19,7 @@ public class MB {
     setTransTable();
   }
 
-  private void addMusic(String title, String data) {
+  public void addMusic(String title, String data) {
     ArrayList<AtomicMusic> music = new ArrayList<>();
     if(musicList.containsKey(title)) {
       stop(title);
@@ -31,7 +31,9 @@ public class MB {
   private void setMusic(ArrayList<AtomicMusic> music, String data) {
     String[] s = data.split(" "); 
     for(int i=1; i<s.length; i+=2) {
-      if("REP".equals(s[i-1])) {
+      if("R".equals(s[i-1])) {
+        music.add(new AtomicMusic(-1, Integer.parseInt(s[i])));
+      } else if("REP".equals(s[i-1])) {
         String[] rep = s[i].split(";");
         music.addAll(
                 createRepeate(
@@ -64,12 +66,24 @@ public class MB {
     return part;
   }
   
+  public void addLyrics(String title, String lyrics) {
+    if(musicList.get(title) != null) {
+      int lyrIdx = 0;
+      String[] syls = lyrics.split(" ");
+      musicList.get(title).forEach((m) -> {
+        if(m.getVoice() != -1) {
+          
+        }
+      });
+    }
+  }
+  
   private void stop(String tilte) {
-    
+    System.out.println("STOP BY TITLE");
   }
   
   public void stop(int number) {
-    
+    System.out.println("STOP BY NUMBER");
   }
 
   private static void setTransTable() {
@@ -89,5 +103,12 @@ public class MB {
       return voiceToCode.get(v[0]) + 12*Integer.parseInt(v[1]);
     }
     return voiceToCode.get(v[0]);
+  }
+  
+  public void printMusic(String title) {
+    System.out.println(title);
+    musicList.get(title).forEach((m) -> {
+      System.out.println("\t" + m.toString());
+    });
   }
 }
