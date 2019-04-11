@@ -12,10 +12,13 @@ public class ClientDescriptor implements AutoCloseable {
     pw = new PrintWriter(s.getOutputStream());
   }
   
+  public void send(AtomicMusic am) {
+    pw.print(am.getVoice() + " " + am.getSyllable());
+    pw.flush();
+  }
   
   @Override
   public void close() throws Exception {
-    
+    s.close();
   }
-  
 }
