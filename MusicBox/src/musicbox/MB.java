@@ -68,13 +68,18 @@ public class MB {
   
   public void addLyrics(String title, String lyrics) {
     if(musicList.get(title) != null) {
-      int lyrIdx = 0;
+      int i = 0;
       String[] syls = lyrics.split(" ");
-      musicList.get(title).forEach((m) -> {
-        if(m.getVoice() != -1) {
-          
+      boolean hasSyl = i<syls.length;
+      for(AtomicMusic m : musicList.get(title)) {
+        if(hasSyl && m.getVoice() != -1) {
+          m.setSyllable(syls[i]);
+          i++;
+          hasSyl = i<syls.length;
+        } else if(!hasSyl && m.getVoice() != -1) {
+          m.setSyllable("???");
         }
-      });
+      }
     }
   }
   

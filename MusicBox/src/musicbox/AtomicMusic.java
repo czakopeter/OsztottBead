@@ -8,7 +8,9 @@ class AtomicMusic {
   public AtomicMusic(int voice, int length) {
     this.voice = voice;
     this.length = length;
-    this.syllable = "???";
+    if(voice != -1) {
+      this.syllable = "???";
+    }
   }
 
   public int getVoice() {
