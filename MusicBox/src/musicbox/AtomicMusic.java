@@ -38,4 +38,9 @@ class AtomicMusic {
     c.setSyllable(syllable);
     return c;
   }
+
+  @Override
+  public String toString() {
+    return "AtomicMusic{" + "voice=" + voice + ", length=" + length + ", syllable=" + syllable + '}';
+  }
 }

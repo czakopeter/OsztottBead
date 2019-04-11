@@ -1,18 +1,22 @@
 package musicbox;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Scanner;
 
 public class MB {
   HashMap<String, ArrayList<AtomicMusic> > musicList;
   HashMap<Integer, PlayedMusic> playedMusic;
   
-  static HashMap<String,Integer> voiceToCode;
+  static HashMap<String,Integer> voiceToCode = new HashMap<>();;
 
   public MB() {
     musicList = new HashMap<>();
     playedMusic = new HashMap<>();
+    setTransTable();
   }
 
   private void addMusic(String title, String data) {
@@ -68,7 +72,22 @@ public class MB {
     
   }
 
-  private static int transform(String string) {
-    
+  private static void setTransTable() {
+    try(
+      Scanner sc = new Scanner(new File("voiceToCode.txt"));
+    ) {
+      while(sc.hasNextLine()) {
+        String[] line = sc.nextLine().split(";");
+        voiceToCode.put(line[0], Integer.parseInt(line[1]));
+      }
+    } catch (FileNotFoundException e) {System.err.println("File not found");}
+  }
+  
+  private static int transform(String voice) {
+    String[] v = voice.split("/");
+    if(v.length > 1) {
+      return voiceToCode.get(v[0]) + 12*Integer.parseInt(v[1]);
+    }
+    return voiceToCode.get(v[0]);
   }
 }
