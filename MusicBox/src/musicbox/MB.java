@@ -86,8 +86,7 @@ public class MB {
   }
   
   public void playMusic(String title) {
-    PlayedMusic pm = new PlayedMusic(musicList.get(title).listIterator(), 0, 0);
-    pm.start();
+    PlayedMusic pm = new PlayedMusic(musicList.get(title), 0, 0);
   }
   
   private void stop(String tilte) {

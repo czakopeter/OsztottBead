@@ -13,6 +13,7 @@ class PlayedMusic extends Thread implements AutoCloseable{
   Socket s;
   PrintWriter pw;
   ArrayList<AtomicMusic> music;
+  int idx;
   int tempo;
   int transfomation;
 
@@ -24,12 +25,11 @@ class PlayedMusic extends Thread implements AutoCloseable{
   }
 
     public PlayedMusic(ArrayList<AtomicMusic> music, int tempo, int transfomation) {
-      this.music = new ArrayList<>();
-      music.forEach((v) -> {
-        this.music.add(v.copy());
-      });
+      this.music = new ArrayList<>(music);
       this.tempo = tempo;
       this.transfomation = transfomation;
+      idx = 0;
+      this.start();
     }
 
   public void setTempoAndTransfomation(int tempo, int transfomation) {
@@ -37,14 +37,9 @@ class PlayedMusic extends Thread implements AutoCloseable{
     this.transfomation = transfomation;
   }
   
-  public void syncMusicSyl() {
-    
-  }
-  
   public void run() {
-    while(it.hasNext()) {
+    for(AtomicMusic am : music) {
         try {
-          AtomicMusic am = (AtomicMusic)it.next();
 //      pw.print(am.getVoice() + " " + am.getSyllable());
 //      pw.flush();
           System.out.println(am);
