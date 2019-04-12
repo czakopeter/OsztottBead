@@ -7,14 +7,18 @@ public class ClientDescriptor implements AutoCloseable {
   Socket s;
   PrintWriter pw;
 
+  public ClientDescriptor() throws Exception{
+  }
+  
   public ClientDescriptor(Socket s) throws Exception{
     this.s = s;
     pw = new PrintWriter(s.getOutputStream());
   }
   
   public void send(AtomicMusic am) {
-    pw.print(am.getVoice() + " " + am.getSyllable());
-    pw.flush();
+      System.out.println(am);
+//    pw.print(am.getVoice() + " " + am.getSyllable());
+//    pw.flush();
   }
   
   @Override

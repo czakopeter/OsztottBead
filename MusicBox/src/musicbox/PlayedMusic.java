@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Iterator;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 class PlayedMusic extends Thread implements AutoCloseable{
   Socket s;
@@ -20,6 +23,12 @@ class PlayedMusic extends Thread implements AutoCloseable{
     this.transfomation = transfomation;
   }
 
+    public PlayedMusic(Iterator it, int tempo, int transfomation) {
+        this.it = it;
+        this.tempo = tempo;
+        this.transfomation = transfomation;
+    }
+
   public void setTempoAndTransfomation(int tempo, int transfomation) {
     this.tempo = tempo;
     this.transfomation = transfomation;
@@ -27,9 +36,15 @@ class PlayedMusic extends Thread implements AutoCloseable{
   
   public void run() {
     while(it.hasNext()) {
-      AtomicMusic am = (AtomicMusic)it.next();
-      pw.print(am.getVoice() + " " + am.getSyllable());
-      pw.flush();
+        try {
+          AtomicMusic am = (AtomicMusic)it.next();
+//      pw.print(am.getVoice() + " " + am.getSyllable());
+//      pw.flush();
+          System.out.println(am);
+          TimeUnit.MILLISECONDS.sleep(1000);
+        } catch (InterruptedException ex) {
+          Logger.getLogger(PlayedMusic.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
   }
 

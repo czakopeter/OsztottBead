@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class MB {
   private final HashMap<String, ArrayList<AtomicMusic> > musicList;
@@ -81,6 +83,11 @@ public class MB {
         }
       }
     }
+  }
+  
+  public void playMusic(String title) {
+    PlayedMusic pm = new PlayedMusic(musicList.get(title).listIterator(), 0, 0);
+    pm.start();
   }
   
   private void stop(String tilte) {
