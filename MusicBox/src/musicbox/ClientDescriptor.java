@@ -17,7 +17,7 @@ public class ClientDescriptor implements AutoCloseable {
     
   }
   
-  public String getMusicTitle() {
+  public String getLine() {
       return sc.nextLine();
   }
   

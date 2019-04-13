@@ -87,14 +87,25 @@ public class MB {
   }
   
   public void playMusic(String title, int tempo, int trans, ClientDescriptor cd) {
-    PlayedMusic pm = new PlayedMusic(musicList.get(title), tempo, trans, playedMusicList.size(), this, cd);
-    pm.start();
-    playedMusicList.put(playedMusicList.size(), pm);
+    if(musicList.containsKey(title)) {
+      PlayedMusic pm = new PlayedMusic(musicList.get(title), tempo, trans, playedMusicList.size(), this, cd);
+      pm.start();
+      playedMusicList.put(playedMusicList.size(), pm);
+    }
+    cd.sendMsg("FIN");
+  }
+  
+  public void change(int number, int tempo, int transfomation) {
+    if(playedMusicList.containsKey(number)){
+      playedMusicList.get(number).setTempoAndTransfomation(tempo, transfomation);
+    }
   }
   
   public void stop(int number) {
-    playedMusicList.get(number).stopPlaying();
-    playedMusicList.remove(number);
+    if(playedMusicList.containsKey(number)) {
+      playedMusicList.get(number).stopPlaying();
+      playedMusicList.remove(number);
+    }
   }
 
   private static void setTransTable() {

@@ -20,15 +20,23 @@ public class MusicBox {
         System.out.println("SERVER: START");
         ClientDescriptor client = new ClientDescriptor(ss);
         System.out.println("SERVER: NEW CLIENT");
-        String[] d = client.getMusicTitle().split(" ");
+        String[] d = client.getLine().split(" ");
         System.out.println("SERVER GET PLAY: " + d);
         switch(d[0]) {
+          case "add":
+            musicBox.addMusic(d[1], client.getLine());
+            break;
+          case "addLyrics":
+            musicBox.addLyrics(d[1], client.getLine());
+            break;
           case "play":
             musicBox.playMusic(d[1],Integer.parseInt(d[2]),Integer.parseInt(d[3]),client);
             break;
           case "change":
+            musicBox.change(Integer.parseInt(d[1]), Integer.parseInt(d[2]), Integer.parseInt(d[3]));
             break;
           case "stop":
+            musicBox.stop(Integer.parseInt(d[1]));
             break;
           default:
             //Never happend

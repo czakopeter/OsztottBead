@@ -1,6 +1,5 @@
 package musicbox;
 
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -37,16 +36,15 @@ class PlayedMusic extends Thread implements AutoCloseable{
   
   @Override
   public void run() {
-    if(music != null) {
-      Iterator it = music.listIterator();
-      while(it.hasNext() && !stop) {
-        try {
-          AtomicMusic am = (AtomicMusic)it.next();
-          cd.sendMsg(am.getVoice() + " " + am.getSyllable());
-          TimeUnit.MILLISECONDS.sleep(am.getLength() * tempo);
-        } catch (InterruptedException ex) {
-          Logger.getLogger(PlayedMusic.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    Iterator it = music.listIterator();
+    while(it.hasNext() && !stop) {
+      try {
+        AtomicMusic am = (AtomicMusic)it.next();
+        System.out.println(transfomation);
+        cd.sendMsg((am.getVoice()+transfomation) + " " + am.getSyllable());
+        TimeUnit.MILLISECONDS.sleep(am.getLength() * tempo);
+      } catch (InterruptedException ex) {
+        Logger.getLogger(PlayedMusic.class.getName()).log(Level.SEVERE, null, ex);
       }
     }
     if(!stop) {
