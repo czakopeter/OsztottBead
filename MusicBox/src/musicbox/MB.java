@@ -3,6 +3,7 @@ package musicbox;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
@@ -21,9 +22,6 @@ public class MB {
 
   public void addMusic(String title, String data) {
     ArrayList<AtomicMusic> music = new ArrayList<>();
-    if(musicList.containsKey(title)) {
-      stop(title);
-    }
     setMusic(music, data);
     musicList.put(title, music);
   }
@@ -87,18 +85,15 @@ public class MB {
     }
   }
   
-  public void playMusic(String title) {
-    PlayedMusic pm = new PlayedMusic(musicList.get(title), 1000, 0, this);
+  public void playMusic(String title, int tempo, int trans, ClientDescriptor cd) {
+    PlayedMusic pm = new PlayedMusic(musicList.get(title), tempo, trans, playedMusicList.size(), this, cd);
     pm.start();
-  }
-  
-  private void stop(String tilte) {
-    System.out.println("STOP BY TITLE");
+    playedMusicList.put(playedMusicList.size(), pm);
   }
   
   public void stop(int number) {
     playedMusicList.get(number).stopPlaying();
-    System.out.println("STOP BY NUMBER");
+    playedMusicList.remove(number);
   }
 
   private static void setTransTable() {
@@ -125,5 +120,9 @@ public class MB {
     musicList.get(title).forEach((m) -> {
       System.out.println("\t" + m.toString());
     });
+  }
+  
+  public Collection<PlayedMusic> getPlayed() {
+    return playedMusicList.values();
   }
 }

@@ -1,24 +1,29 @@
 package musicbox;
 
 import java.io.PrintWriter;
+import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Scanner;
 
 public class ClientDescriptor implements AutoCloseable {
   Socket s;
   PrintWriter pw;
-
-  public ClientDescriptor() throws Exception{
-  }
+  Scanner sc;
   
-  public ClientDescriptor(Socket s) throws Exception{
-    this.s = s;
+  public ClientDescriptor(ServerSocket ss) throws Exception{
+    s = ss.accept();
     pw = new PrintWriter(s.getOutputStream());
+    sc = new Scanner(s.getInputStream());
+    
   }
   
-  public void send(AtomicMusic am) {
-      System.out.println(am);
-//    pw.print(am.getVoice() + " " + am.getSyllable());
-//    pw.flush();
+  public String getMusicTitle() {
+      return sc.nextLine();
+  }
+  
+  public void sendMsg(String msg) {
+    pw.println(msg);
+    pw.flush();
   }
   
   @Override
