@@ -16,6 +16,8 @@ class PlayedMusic extends Thread implements AutoCloseable{
   int idx;
   int tempo;
   int transfomation;
+  boolean stop;
+  MB mb;
 
   public PlayedMusic(Socket s, int tempo, int transfomation) throws IOException {
     this.s = s;
@@ -24,12 +26,13 @@ class PlayedMusic extends Thread implements AutoCloseable{
     this.transfomation = transfomation;
   }
 
-    public PlayedMusic(ArrayList<AtomicMusic> music, int tempo, int transfomation) {
+    public PlayedMusic(ArrayList<AtomicMusic> music, int tempo, int transfomation, MB mb) {
       this.music = new ArrayList<>(music);
       this.tempo = tempo;
       this.transfomation = transfomation;
       idx = 0;
-      this.start();
+      stop = false;
+      this.mb = mb;
     }
 
   public void setTempoAndTransfomation(int tempo, int transfomation) {
@@ -37,17 +40,25 @@ class PlayedMusic extends Thread implements AutoCloseable{
     this.transfomation = transfomation;
   }
   
+  @Override
   public void run() {
-    for(AtomicMusic am : music) {
-        try {
+    Iterator it = music.listIterator();
+    while(it.hasNext() && !stop) {
+      try {
 //      pw.print(am.getVoice() + " " + am.getSyllable());
 //      pw.flush();
-          System.out.println(am);
-          TimeUnit.MILLISECONDS.sleep(1000);
-        } catch (InterruptedException ex) {
-          Logger.getLogger(PlayedMusic.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        System.out.println(it.next());
+        TimeUnit.MILLISECONDS.sleep(tempo);
+      } catch (InterruptedException ex) {
+        Logger.getLogger(PlayedMusic.class.getName()).log(Level.SEVERE, null, ex);
+      }
     }
+    mb.stop(idx);
+    System.out.println("FIN");
+  }
+  
+  public void stopPlaying() {
+    stop = true;
   }
 
   @Override

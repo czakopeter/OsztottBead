@@ -6,18 +6,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class MB {
   private final HashMap<String, ArrayList<AtomicMusic> > musicList;
-  private final HashMap<Integer, PlayedMusic> playedMusic;
+  private final HashMap<Integer, PlayedMusic> playedMusicList;
   
-  private final static HashMap<String,Integer> voiceToCode = new HashMap<>();;
+  private final static HashMap<String,Integer> VOICE_TO_CODE = new HashMap<>();;
 
   public MB() {
     musicList = new HashMap<>();
-    playedMusic = new HashMap<>();
+    playedMusicList = new HashMap<>();
     setTransTable();
   }
 
@@ -33,16 +31,20 @@ public class MB {
   private void setMusic(ArrayList<AtomicMusic> music, String data) {
     String[] s = data.split(" "); 
     for(int i=1; i<s.length; i+=2) {
-      if("R".equals(s[i-1])) {
-        music.add(new AtomicMusic(-1, Integer.parseInt(s[i])));
-      } else if("REP".equals(s[i-1])) {
-        String[] rep = s[i].split(";");
-        music.addAll(
-                createRepeate(
-                        createCopyPart(music,Integer.parseInt(rep[0]),music.size()),
-                        Integer.parseInt(rep[1])));
-      } else {
-        music.add(new AtomicMusic(transform(s[i-1]), Integer.parseInt(s[i])));
+      switch (s[i-1]) {
+        case "R":
+          music.add(new AtomicMusic(-1, Integer.parseInt(s[i])));
+          break;
+        case "REP":
+          String[] rep = s[i].split(";");
+          music.addAll(
+                  createRepeate(
+                          createCopyPart(music,Integer.parseInt(rep[0]),music.size()),
+                          Integer.parseInt(rep[1])));
+          break;
+        default:
+          music.add(new AtomicMusic(transform(s[i-1]), Integer.parseInt(s[i])));
+          break;
       }
     }
   }
@@ -86,7 +88,8 @@ public class MB {
   }
   
   public void playMusic(String title) {
-    PlayedMusic pm = new PlayedMusic(musicList.get(title), 0, 0);
+    PlayedMusic pm = new PlayedMusic(musicList.get(title), 1000, 0, this);
+    pm.start();
   }
   
   private void stop(String tilte) {
@@ -94,6 +97,7 @@ public class MB {
   }
   
   public void stop(int number) {
+    playedMusicList.get(number).stopPlaying();
     System.out.println("STOP BY NUMBER");
   }
 
@@ -103,7 +107,7 @@ public class MB {
     ) {
       while(sc.hasNextLine()) {
         String[] line = sc.nextLine().split(";");
-        voiceToCode.put(line[0], Integer.parseInt(line[1]));
+        VOICE_TO_CODE.put(line[0], Integer.parseInt(line[1]));
       }
     } catch (FileNotFoundException e) {System.err.println("File not found");}
   }
@@ -111,9 +115,9 @@ public class MB {
   private static int transform(String voice) {
     String[] v = voice.split("/");
     if(v.length > 1) {
-      return voiceToCode.get(v[0]) + 12*Integer.parseInt(v[1]);
+      return VOICE_TO_CODE.get(v[0]) + 12*Integer.parseInt(v[1]);
     }
-    return voiceToCode.get(v[0]);
+    return VOICE_TO_CODE.get(v[0]);
   }
   
   public void printMusic(String title) {
