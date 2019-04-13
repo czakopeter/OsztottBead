@@ -21,7 +21,7 @@ class PlayedMusic extends Thread implements AutoCloseable{
   ClientDescriptor cd;
 
     public PlayedMusic(ArrayList<AtomicMusic> music, int tempo, int transfomation, int idx, MB mb, ClientDescriptor cd) {
-      this.music = new ArrayList<>(music);
+      this.music = music;
       this.tempo = tempo;
       this.transfomation = transfomation;
       this.idx = idx;
@@ -37,14 +37,16 @@ class PlayedMusic extends Thread implements AutoCloseable{
   
   @Override
   public void run() {
-    Iterator it = music.listIterator();
-    while(it.hasNext() && !stop) {
-      try {
-        AtomicMusic am = (AtomicMusic)it.next();
-        cd.sendMsg(am.getVoice() + " " + am.getSyllable());
-        TimeUnit.MILLISECONDS.sleep(tempo);
-      } catch (InterruptedException ex) {
-        Logger.getLogger(PlayedMusic.class.getName()).log(Level.SEVERE, null, ex);
+    if(music != null) {
+      Iterator it = music.listIterator();
+      while(it.hasNext() && !stop) {
+        try {
+          AtomicMusic am = (AtomicMusic)it.next();
+          cd.sendMsg(am.getVoice() + " " + am.getSyllable());
+          TimeUnit.MILLISECONDS.sleep(am.getLength() * tempo);
+        } catch (InterruptedException ex) {
+          Logger.getLogger(PlayedMusic.class.getName()).log(Level.SEVERE, null, ex);
+        }
       }
     }
     if(!stop) {

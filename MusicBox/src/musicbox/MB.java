@@ -37,7 +37,7 @@ public class MB {
           String[] rep = s[i].split(";");
           music.addAll(
                   createRepeate(
-                          createCopyPart(music,Integer.parseInt(rep[0]),music.size()),
+                          createCopyPart(music,music.size()-Integer.parseInt(rep[0]),music.size()),
                           Integer.parseInt(rep[1])));
           break;
         default:
@@ -52,6 +52,7 @@ public class MB {
     music.subList(from, to).forEach((m) -> {
       copy.add(m.copy());
     });
+    
     return copy;
   }
   
