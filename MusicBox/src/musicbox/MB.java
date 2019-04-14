@@ -86,13 +86,15 @@ public class MB {
     }
   }
   
-  public void playMusic(String title, int tempo, int trans, ClientDescriptor cd) {
+  public void playMusic(String title, int tempo, int trans, ClientDescriptor cd) throws Exception {
     if(musicList.containsKey(title)) {
       PlayedMusic pm = new PlayedMusic(musicList.get(title), tempo, trans, playedMusicList.size(), this, cd);
       pm.start();
       playedMusicList.put(playedMusicList.size(), pm);
+    } else {
+      cd.sendMsg("FIN");
+      cd.close();
     }
-    cd.sendMsg("FIN");
   }
   
   public void change(int number, int tempo, int transfomation) {
@@ -125,16 +127,5 @@ public class MB {
       return VOICE_TO_CODE.get(v[0]) + 12*Integer.parseInt(v[1]);
     }
     return VOICE_TO_CODE.get(v[0]);
-  }
-  
-  public void printMusic(String title) {
-    System.out.println(title);
-    musicList.get(title).forEach((m) -> {
-      System.out.println("\t" + m.toString());
-    });
-  }
-  
-  public Collection<PlayedMusic> getPlayed() {
-    return playedMusicList.values();
   }
 }
