@@ -2,6 +2,7 @@ package musicbox;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,7 +34,32 @@ class PlayedMusic extends Thread implements AutoCloseable{
   @Override
   public void run() {
     Iterator it = music.listIterator();
-    System.out.println(it.hasNext());
+    
+    Thread t = new Thread(() -> {
+      boolean end = false;
+      while(!end) {
+        try{
+          String[] d = cd.getLine().split(" ");
+          switch(d[0]) {
+            case "change":
+              if(d.length == 4) {
+                mb.change(Integer.parseInt(d[1]), Integer.parseInt(d[2]), Integer.parseInt(d[3]));
+              }
+              else {
+                mb.change(Integer.parseInt(d[1]), Integer.parseInt(d[2]));
+              }
+              break;
+            case "stop":
+              mb.stop(Integer.parseInt(d[1]));
+              break;
+          }
+        } catch(NoSuchElementException ex) {
+          end = true;
+        }
+      }
+      System.out.println("END");
+    });
+    t.start();
     while(it.hasNext() && !stop) {
       try {
         AtomicMusic am = (AtomicMusic)it.next();
@@ -48,6 +74,7 @@ class PlayedMusic extends Thread implements AutoCloseable{
       mb.stop(idx);
     }
     cd.sendMsg("FIN");
+    System.out.println("Thread number: " + Thread.getAllStackTraces().size());
   }
   
   public void stopPlaying() {
@@ -56,6 +83,7 @@ class PlayedMusic extends Thread implements AutoCloseable{
 
   @Override
   public void close() throws Exception {
+    System.out.println("STOP");
     cd.close();
   }
 }

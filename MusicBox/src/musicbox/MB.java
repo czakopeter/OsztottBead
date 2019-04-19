@@ -107,6 +107,10 @@ public class MB {
     }
   }
   
+  public void change(int number, int tempo) {
+    change(number, tempo, 0);
+  }
+  
   public void stop(int number) {
     if(playedMusicList.containsKey(number)) {
       playedMusicList.get(number).stopPlaying();
