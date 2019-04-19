@@ -1,19 +1,19 @@
 package musicbox;
 
 class AtomicMusic {
-  private int voice;
+  private String voice;
   private int length;
   private String syllable;
 
-  public AtomicMusic(int voice, int length) {
+  public AtomicMusic(String voice, int length) {
     this.voice = voice;
     this.length = length;
-    if(voice != -1) {
+    if(!"R".equals(voice)) {
       this.syllable = "???";
     }
   }
 
-  public int getVoice() {
+  public String getVoice() {
     return voice;
   }
 
@@ -25,14 +25,18 @@ class AtomicMusic {
     return syllable;
   }
 
-  public void setVoiceAndLength(int voice, int length) {
+  public void setVoiceAndLength(String voice, int length) {
     this.voice = voice;
     this.length = length;
   }
 
   
-  public void setSyllable(String syllable) {
+  public boolean setSyllable(String syllable) {
+    if("R".equals(voice)) {
+      return false;
+    }
     this.syllable = syllable;
+    return true;
   }
   
   public AtomicMusic copy() {
