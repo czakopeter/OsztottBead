@@ -22,7 +22,10 @@ public class MusicBox {
       while(true) {
         ClientDescriptor client = new ClientDescriptor(ss);
         System.out.println("SERVER: NEW CLIENT");
-        String[] d = client.getLine().split(" ");
+        String line = client.getLine();
+        System.out.println(line);
+        String[] d = line.split(" ");
+        
         switch(d[0]) {
           case "add":
             musicBox.addMusic(d[1], client.getLine());
@@ -41,6 +44,9 @@ public class MusicBox {
             break;
           default:
             //Never happened
+        }
+        if(!"play".equals(d[0])) {
+          client.close();
         }
       }
     } catch (IOException ex) {

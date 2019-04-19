@@ -3,7 +3,6 @@ package musicbox;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
@@ -13,11 +12,13 @@ public class MB {
   private final HashMap<Integer, PlayedMusic> playedMusicList;
   
   private final static HashMap<String,Integer> VOICE_TO_CODE = new HashMap<>();;
+  int number;
 
   public MB() {
     musicList = new HashMap<>();
     playedMusicList = new HashMap<>();
     setTransTable();
+    number = 0;
   }
 
   public void addMusic(String title, String data) {
@@ -88,9 +89,11 @@ public class MB {
   
   public void playMusic(String title, int tempo, int trans, ClientDescriptor cd) throws Exception {
     if(musicList.containsKey(title)) {
-      PlayedMusic pm = new PlayedMusic(musicList.get(title), tempo, trans, playedMusicList.size(), this, cd);
+      cd.sendMsg(String.valueOf(number));
+      PlayedMusic pm = new PlayedMusic(musicList.get(title), tempo, trans, number, this, cd);
       pm.start();
-      playedMusicList.put(playedMusicList.size(), pm);
+      playedMusicList.put(number, pm);
+      numberIncrease();
     } else {
       cd.sendMsg("FIN");
       cd.close();
@@ -99,6 +102,7 @@ public class MB {
   
   public void change(int number, int tempo, int transfomation) {
     if(playedMusicList.containsKey(number)){
+      System.out.println("tempo: " + tempo + ", trans: " + transfomation);
       playedMusicList.get(number).setTempoAndTransfomation(tempo, transfomation);
     }
   }
@@ -127,5 +131,9 @@ public class MB {
       return VOICE_TO_CODE.get(v[0]) + 12*Integer.parseInt(v[1]);
     }
     return VOICE_TO_CODE.get(v[0]);
+  }
+  
+  void numberIncrease() {
+    number++;
   }
 }
