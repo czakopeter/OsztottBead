@@ -9,19 +9,19 @@ import java.util.logging.Logger;
 class PlayedMusic extends Thread implements AutoCloseable{
   boolean end;
   List<AtomicMusic> music;
-  int idx;
+  int number;
   int tempo;
   int transfomation;
   Client client;
-  Transformation trans;
+  Player player;
 
-    public PlayedMusic(List<AtomicMusic> music, int tempo, int transfomation, Transformation trans, Client c) {
+    public PlayedMusic(int number, List<AtomicMusic> music, int tempo, int transfomation, Client c, Player player) {
       end = false;
       this.music = music;
       this.tempo = tempo;
       this.transfomation = transfomation;
       this.client = c;
-      this.trans = trans;
+      this.player = player;
     }
 
   public void setTempoAndTransfomation(int tempo, int transfomation) {
@@ -37,17 +37,16 @@ class PlayedMusic extends Thread implements AutoCloseable{
       try {
         AtomicMusic am = (AtomicMusic)it.next();
         System.out.println(am);
-        client.sendMsg(trans.transform(am.getVoice(),transfomation) + " " + am.getSyllable());
+        client.sendMsg(Transformation.transform(am.getVoice(),transfomation) + " " + am.getSyllable());
         TimeUnit.MILLISECONDS.sleep(am.getLength() * tempo);
       } catch (InterruptedException ex) {
         Logger.getLogger(PlayedMusic.class.getName()).log(Level.SEVERE, null, ex);
       }
     }
+    client.sendMsg("FIN");
     if(!end) {
-      mb.stop(idx);
+      player.stop(number);
     }
-    cd.sendMsg("FIN");
-    System.out.println("Thread number: " + Thread.getAllStackTraces().size());
   }
   
   public void stopPlaying() {

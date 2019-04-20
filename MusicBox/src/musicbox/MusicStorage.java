@@ -8,7 +8,7 @@ import java.util.Map;
 public class MusicStorage {
   private final Map<String, ArrayList<AtomicMusic> > musicList;
 
-  public MusicStorage(Transformation t) {
+  public MusicStorage() {
     musicList = new HashMap<>();
   }
   

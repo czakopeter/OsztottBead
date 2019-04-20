@@ -27,11 +27,11 @@ public class Transformation {
     } catch (FileNotFoundException e) {System.err.println("File not found");}
   }
 
-  public String transform(String voice, int transformation) {
+  public static String transform(String voice, int transformation) {
     return tCodeToVoice(tVoiceToCode(voice)+transformation);
   }
   
-  public int tVoiceToCode(String voice) {
+  public static int tVoiceToCode(String voice) {
     String[] v = voice.split("/");
     if(v.length > 1) {
       return voiceToCode.get(v[0]) + 12*Integer.parseInt(v[1]);
@@ -39,7 +39,7 @@ public class Transformation {
     return voiceToCode.get(v[0]);
   }
   
-  public String tCodeToVoice(int code) {
+  public static String tCodeToVoice(int code) {
     StringBuilder sb = new StringBuilder(codeToVoice.get(code+code%12));
     sb.append("/").append(code/12-6);
     return sb.toString();
