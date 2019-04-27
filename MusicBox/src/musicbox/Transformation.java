@@ -10,6 +10,8 @@ public class Transformation {
   private static HashMap<Integer, String> codeToVoice;
 
   public Transformation() {
+    voiceToCode = new HashMap<>();
+    codeToVoice = new HashMap<>();
     setTables();
   }
   
