@@ -30,6 +30,9 @@ public class Transformation {
   }
 
   public static String transform(String voice, int transformation) {
+    if("R".equals(voice)) {
+      return voice;
+    }
     return tCodeToVoice(tVoiceToCode(voice)+transformation);
   }
   
@@ -42,8 +45,11 @@ public class Transformation {
   }
   
   public static String tCodeToVoice(int code) {
-    StringBuilder sb = new StringBuilder(codeToVoice.get(code+code%12));
-    sb.append("/").append(code/12-6);
+    StringBuilder sb = new StringBuilder(codeToVoice.get(60+code%12));
+    int t = code/12-6;
+    if(t != 0) {
+      sb.append("/").append(t);
+    }
     return sb.toString();
   }
 }

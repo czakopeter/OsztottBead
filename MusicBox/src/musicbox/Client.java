@@ -6,15 +6,14 @@ import java.net.Socket;
 import java.util.Scanner;
 
 public class Client implements AutoCloseable {
-  private Socket s;
-  private PrintWriter pw;
-  private Scanner sc;
+  private final Socket s;
+  private final PrintWriter pw;
+  private final Scanner sc;
   
   public Client(ServerSocket ss) throws Exception{
     s = ss.accept();
     pw = new PrintWriter(s.getOutputStream());
     sc = new Scanner(s.getInputStream());
-    
   }
   
   public String nextLine() {

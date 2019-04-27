@@ -16,7 +16,7 @@ public class Player {
   
   public void play(List<AtomicMusic> music, int tempo, int transportation, Client c) {
     if(music != null) {
-      c.sendMsg(String.valueOf(number));
+      c.sendMsg("playing " + number);
       PlayedMusic pm = new PlayedMusic(number, music, tempo, transportation, c, this);
       playedMusicList.put(number, pm);
       numberIncrease();
