@@ -24,14 +24,8 @@ class AtomicMusic {
   public String getSyllable() {
     return syllable;
   }
-
-  public void setVoiceAndLength(String voice, int length) {
-    this.voice = voice;
-    this.length = length;
-  }
-
   
-  public boolean setSyllable(String syllable) {
+  public synchronized boolean setSyllable(String syllable) {
     if("R".equals(voice)) {
       return false;
     }

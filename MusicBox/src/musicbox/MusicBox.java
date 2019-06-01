@@ -1,8 +1,6 @@
 package musicbox;
 
 import java.net.ServerSocket;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -12,6 +10,7 @@ public class MusicBox {
   public static void main(String[] args) throws Exception {
     Transformation trans = new Transformation();
     MusicStorage musicStorage = new MusicStorage();
+    musicStorage.addMusic("Boci", "C 4 E 4 C 4 E 4 G 8 G 8 REP 6;1 C/1 4 B 4 A 4 G 4 F 8 A 8 G 4 F 4 E 4 D 4 C 8 C 8");
     Player player = new Player();
     try(
       ServerSocket ss = new ServerSocket(PORT);

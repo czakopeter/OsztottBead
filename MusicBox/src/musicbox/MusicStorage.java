@@ -14,7 +14,9 @@ public class MusicStorage {
   
   public void addMusic(String title, String voices) {
     ArrayList<AtomicMusic> music = generateMusic(voices.split(" "));
-    musicList.put(title, music);
+    synchronized(musicList) {
+      musicList.put(title, music);
+    }
   }
   
   public void addLyrics(String title, String lyrics) {
